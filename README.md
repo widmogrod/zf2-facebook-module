@@ -37,8 +37,3 @@ return array(
             ),
     // (...)
 ```
-
-
-P.S. Sory for my english.
-
-
