@@ -1,5 +1,5 @@
 # Introduction
-FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/php-sdk) linbrary
+FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/php-sdk) library
 
 # Requirements
 
