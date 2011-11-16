@@ -24,16 +24,17 @@ $this->getLocator()->get('facebook') // Facebook object
 ``` php
 // modules/Application/configs/module.config.php
 return array(
-    'di' => array(
-        'instance' => array(
 
-            'facebook' => array(
-                'parameters' => array(
-                    'config' => array(
-                        'appId'  => 'your_app_id',
-                        'secret' => 'your_secret',
-                    )
-                )
-            ),
+    /*
+     * User configuration layout
+     */
+    'FacebookBundle' => array(
+
+        // if set to true then view helper 'HeadScript' will be setup by: var FB_APP_ID = 'yout_app_id';
+        'setAppIdInHeadScript' => true,
+
+        'appId'                => 'your_app_id',
+        'secret'               => 'your_secret',
+    ),
     // (...)
 ```
