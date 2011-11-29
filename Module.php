@@ -3,10 +3,10 @@
 namespace FacebookBundle;
 
 use Zend\Module\Manager,
-    Zend\Loader\AutoloaderFactory,
+    Zend\Module\Consumer\AutoloaderProvider,
     Zend\EventManager\StaticEventManager;
 
-class Module
+class Module implements AutoloaderProvider
 {
     /**
      * @var \Zend\Di\Di
@@ -19,22 +19,29 @@ class Module
         'secret'               => 'your_secret'
     );
 
+    protected $moduleManager;
+
     public function init(Manager $moduleManager)
     {
-        $this->initAutoloader();
+        $this->moduleManager = $moduleManager;
 
         # pre bootstrap
         $events = StaticEventManager::getInstance();
         $events->attach('bootstrap', 'bootstrap', array($this, 'preBootstrapListner'), 20);
     }
 
-    public function initAutoloader()
+    /**
+     * Return an array for passing to Zend\Loader\AutoloaderFactory.
+     *
+     * @return array
+     */
+    public function getAutoloaderConfig()
     {
-        AutoloaderFactory::factory(array(
+        return array(
             'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/autoload_classmap.php',
             ),
-        ));
+        );
     }
 
     public function initOptions(Manager $moduleManager)
@@ -57,7 +64,7 @@ class Module
         $app = $e->getParam('application');
         $this->locator = $app->getLocator();
 
-        $this->initOptions($e->getParam('modules'));
+        $this->initOptions($this->moduleManager);
 
         # setup facebook instance configuration
         $this->locator
