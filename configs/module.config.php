@@ -6,14 +6,23 @@ return array(
      */
     'FacebookBundle' => array(
         'setAppIdInHeadScript' => true,
-        'appId'                => 'your_app_id',
-        'secret'               => 'your_secret',
     ),
 
     'di' => array(
         'instance' => array(
             'alias' => array(
                 'facebook' => 'Facebook',
+            ),
+            'Facebook' => array(
+                'parameters' => array(
+                    'config'  => array(
+                        /**
+                         * Facebook PHP SDK parameters 
+                         */
+                        'appId'  => 'your_app_id',
+                        'secret' => 'your_secret',
+                    ),
+                ),
             ),
         ),
     ),

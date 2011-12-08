@@ -15,8 +15,6 @@ class Module implements AutoloaderProvider
 
     protected $config = array(
         'setAppIdInHeadScript' => true,
-        'appId'                => 'your_app_id',
-        'secret'               => 'your_secret'
     );
 
     protected $moduleManager;
@@ -66,11 +64,6 @@ class Module implements AutoloaderProvider
 
         $this->initOptions($this->moduleManager);
 
-        # setup facebook instance configuration
-        $this->locator
-             ->instanceManager()
-             ->setConfiguration('Facebook',  array('parameters' => array('config' => $this->getFacebookConfig())));
-
         # add post dispatch action
         if ($this->isAppIdInHeadScript()) {
             $app->events()->attach('dispatch', array($this, 'postDispatchListner'), 32);
@@ -97,17 +90,12 @@ class Module implements AutoloaderProvider
         return $this->config['setAppIdInHeadScript'];
     }
 
-    public function getFacebookConfig()
-    {
-        return array(
-            'appId'  => $this->config['appId'],
-            'secret' => $this->config['secret']
-        );
-    }
-
     public function getAppId()
     {
-        return $this->config['appId'];
+        $config = $this->locator
+             ->instanceManager()
+             ->getConfiguration('Facebook');
+        return $config['parameters']['config']['appId'];
     }
 
     /*
