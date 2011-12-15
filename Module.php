@@ -41,17 +41,7 @@ class Module implements AutoloaderProvider
             ),
         );
     }
-
-    public function initOptions(Manager $moduleManager)
-    {
-        /** @var $config \Zend\Config\Config */
-        $config = $moduleManager->getMergedConfig(false);
-        $this->config = array_merge(
-            $this->config,
-            isset($config[__NAMESPACE__]) ? $config[__NAMESPACE__] : array()
-        );
-    }
-
+    
     /*
      * Listners
      */
@@ -61,8 +51,6 @@ class Module implements AutoloaderProvider
         /* @var $app \Zend\Mvc\Application */
         $app = $e->getParam('application');
         $this->locator = $app->getLocator();
-
-        $this->initOptions($this->moduleManager);
 
         # add post dispatch action
         if ($this->isAppIdInHeadScript()) {
