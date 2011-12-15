@@ -32,9 +32,19 @@ return array(
 
         // if set to true then view helper 'HeadScript' will be setup by: var FB_APP_ID = 'yout_app_id';
         'setAppIdInHeadScript' => true,
-
-        'appId'                => 'your_app_id',
-        'secret'               => 'your_secret',
+    ),
+    'di' => array(
+        'instance' => array(
+            'Facebook' => array(
+                'parameters' => array(
+                    'config'  => array(
+                        // set your Facebook application parameters here
+                        'appId'  => 'your_app_id',
+                        'secret' => 'your_secret',
+                    ),
+                ),
+            ),
+        ),
     ),
     // (...)
 ```
