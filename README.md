@@ -1,5 +1,7 @@
 # Introduction
-FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/php-sdk) library
+FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/php-sdk) library.
+
+P.S. Sory for my english. If You wish to help me with this project or correct my english description - You are welcome :)
 
 # Requirements
 
@@ -22,19 +24,37 @@ $this->getLocator()->get('facebook') // Facebook object
 
 # How to setup
 ``` php
-// modules/Application/configs/module.config.php
+<?php
 return array(
 
     /*
-     * User configuration layout
+     * Is not required IF 'di->instance->facebook' config section is set.
+     * User configuration layout will be propagated to 'di->instance->facebook' IF 'di->instance->facebook->config' is not set.
      */
     'FacebookBundle' => array(
-
-        // if set to true then view helper 'HeadScript' will be setup by: var FB_APP_ID = 'yout_app_id';
         'setAppIdInHeadScript' => true,
 
         'appId'                => 'your_app_id',
         'secret'               => 'your_secret',
     ),
-    // (...)
+
+    'di' => array(
+        'instance' => array(
+            'alias' => array(
+                'facebook' => 'Facebook',
+            ),
+
+            /*
+             * Is not required, IF 'FacebookBundle' config section is set.
+             */
+            'facebook' => array(
+                'config' => array(
+                    'appId'                => 'your_app_id',
+                    'secret'               => 'your_secret',
+                )
+            )
+        ),
+    ),
+);
+?>
 ```

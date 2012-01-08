@@ -19,15 +19,14 @@ class Module implements AutoloaderProvider
         'secret'               => 'your_secret'
     );
 
-    protected $moduleManager;
 
     public function init(Manager $moduleManager)
     {
-        $this->moduleManager = $moduleManager;
-
-        # pre bootstrap
         $events = StaticEventManager::getInstance();
-        $events->attach('bootstrap', 'bootstrap', array($this, 'preBootstrapListner'), 20);
+        # post configuration merge
+        $events->attach('Zend\Module\Manager', 'loadModules.post', array($this, 'postModulesLoadsListener'), 8);
+        # pre bootstrap
+        $events->attach('bootstrap', 'bootstrap', array($this, 'preBootstrapListener'), 20);
     }
 
     /**
@@ -44,40 +43,44 @@ class Module implements AutoloaderProvider
         );
     }
 
-    public function initOptions(Manager $moduleManager)
+
+    /*
+     * Listeners
+     */
+
+    public function postModulesLoadsListener(\Zend\Module\ModuleEvent $event)
     {
-        /** @var $config \Zend\Config\Config */
-        $config = $moduleManager->getMergedConfig(false);
+        /** @var $cl \Zend\Module\Listener\ConfigMerger */
+        $cl = $event->getConfigListener();
+        $config = $cl->getMergedConfig(false);
         $this->config = array_merge(
             $this->config,
             isset($config[__NAMESPACE__]) ? $config[__NAMESPACE__] : array()
         );
     }
 
-    /*
-     * Listners
-     */
-
-    public function preBootstrapListner(\Zend\EventManager\Event $e)
+    public function preBootstrapListener(\Zend\EventManager\Event $e)
     {
         /* @var $app \Zend\Mvc\Application */
         $app = $e->getParam('application');
         $this->locator = $app->getLocator();
 
-        $this->initOptions($this->moduleManager);
-
         # setup facebook instance configuration
-        $this->locator
-             ->instanceManager()
-             ->setConfiguration('Facebook',  array('parameters' => array('config' => $this->getFacebookConfig())));
+        if ($this->canPropagateUserConfigToDi())
+        {
+            $this
+                ->locator
+                ->instanceManager()
+                ->setConfiguration('Facebook',  array('parameters' => array('config' => $this->getFacebookUserConfig())));
+        }
 
         # add post dispatch action
         if ($this->isAppIdInHeadScript()) {
-            $app->events()->attach('dispatch', array($this, 'postDispatchListner'), 32);
+            $app->events()->attach('dispatch', array($this, 'postDispatchListener'), 32);
         }
     }
 
-    public function postDispatchListner(\Zend\Mvc\MvcEvent $e)
+    public function postDispatchListener(\Zend\Mvc\MvcEvent $e)
     {
         $script = sprintf('var FB_APP_ID = "%s";', $this->getAppId());
 
@@ -97,7 +100,16 @@ class Module implements AutoloaderProvider
         return $this->config['setAppIdInHeadScript'];
     }
 
-    public function getFacebookConfig()
+    public function canPropagateUserConfigToDi()
+    {
+        $config = $this->locator
+             ->instanceManager()
+             ->getConfiguration('facebook');
+
+        return (false === isset($config['parameters']['config']['appId']));
+    }
+
+    public function getFacebookUserConfig()
     {
         return array(
             'appId'  => $this->config['appId'],
@@ -107,7 +119,13 @@ class Module implements AutoloaderProvider
 
     public function getAppId()
     {
-        return $this->config['appId'];
+        $config = $this->locator
+            ->instanceManager()
+            ->getConfiguration('facebook');
+
+        return $this->canPropagateUserConfigToDi()
+            ? $this->config['appId']
+            : $config['parameters']['config']['appId'];
     }
 
     /*
@@ -118,12 +136,12 @@ class Module implements AutoloaderProvider
     {
         return array(
             __NAMESPACE__ => array(
-                'version' => '1.1.0'
+                'version' => '1.2.0'
             ),
         );
     }
 
-    public function getConfig($env = null)
+    public function getConfig()
     {
         return include __DIR__ . '/configs/module.config.php';
     }
