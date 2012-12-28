@@ -1,5 +1,4 @@
 <?php
-
 namespace FacebookBundle;
 
 use Zend\Module\Manager,
