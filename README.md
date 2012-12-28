@@ -1,28 +1,38 @@
-# Introduction
-FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/php-sdk) library.
+# FacebookBundle
+## Introduction
+FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/facebook-php-sdk) library.
 
-P.S. Sory for my english. If You wish to help me with this project or correct my english description - You are welcome :)
+P.S. Sorry for my english. If You wish to help me with this project or correct my english description - You are welcome :)
 
-# Requirements
+## Requirements
 
-  * Zend Framework 2 (https://github.com/zendframework/zf2)
+  * Zend Framework 2 (https://github.com/zendframework/zf2). Tested on Zend Framework 2.0.*.
+  * PHP 5.3 or gather
 
-# Installation
+## Installation
 
-Simplest way:
+  1. `cd my/project/directory`
+  2. Create a `composer.json` file with following content:
 
-  1. cd my/project/folder
-  2. git clone git://github.com/widmogrod/zf2-facebook-module.git modules/FacebookBundle --recursive
-  3. open my/project/folder/configs/application.config.php and add 'FacebookBundle' to your 'modules' parameter.
+``` json
+{
+    "require": {
+        "widmogrod/zf2-facebook-module": "dev-master"
+    }
+}
+```
 
-# How to use
+  3. Run `php composer.phar install`
+  4. Open ``my/project/folder/configs/application.config.php`` and add ``'FacebookBundle'`` to your ``'modules'`` parameter.
+
+## How to use
 
 ``` php
 // in controller
 $this->getLocator()->get('facebook') // Facebook object
 ```
 
-# How to setup
+## How to setup
 ``` php
 <?php
 return array(
