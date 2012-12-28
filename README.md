@@ -1,4 +1,4 @@
-# FacebookBundle
+# FacebookBundle - NOT MAINTAINED.
 ## Introduction
 FacebookBundle is simple integration with [Facebook php-sdk](https://github.com/facebook/facebook-php-sdk) library.
 
@@ -6,7 +6,7 @@ P.S. Sorry for my english. If You wish to help me with this project or correct m
 
 ## Requirements
 
-  * Zend Framework 2 (https://github.com/zendframework/zf2). Tested on Zend Framework 2.0.*.
+  * Zend Framework 2 (https://github.com/zendframework/zf2). Tested on Zend Framework 2.0.0beta4.
   * PHP 5.3 or gather
 
 ## Installation
