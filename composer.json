@@ -9,7 +9,7 @@
     "homepage": "https://github.com/widmogrod/zf2-facebook-module",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.0.0beta4",
+        "zendframework/zendframework": "dev-master",
         "facebook/php-sdk": "v3.2.1"
     },
     "autoload": {
