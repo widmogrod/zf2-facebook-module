@@ -12,6 +12,9 @@
         "zendframework/zendframework": "2.0.0beta4",
         "facebook/php-sdk": "v3.2.1"
     },
+    "require-dev": {
+        "zendframework/zendframework": "dev-master",
+    },
     "autoload": {
         "psr-0": {
             "FacebookBundle": "src"
